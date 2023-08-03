@@ -1,10 +1,9 @@
 const dotenv = require('dotenv');
-const EmailService = require('./emailService');
+const db = require('./queries')
 
 dotenv.config();
 
-const queue = 'email-task';
-
+const queue = 'money-task';
 const open = require('amqplib').connect(process.env.AMQP_SERVER);
 
 // Publisher
@@ -19,12 +18,8 @@ const consumeMessage = () => {
     console.log(' [*] Waiting for messages in %s. To exit press CTRL+C', queue);
     return channel.consume(queue, (msg) => {
       if (msg !== null) {
-        const { mail, subject, template } = JSON.parse(msg.content.toString());
-        console.log(' [x] Received %s', mail);
-        // send email via aws ses
-        EmailService.sendMail(mail, subject, template, 'eduardoaayora64@gmail.com').then(() => {
-          channel.ack(msg);
-        });
+        db.moveMoney(JSON.parse(msg.content.toString()))
+        // send email
       }
     });
   })).catch(error => console.warn(error));

@@ -3,24 +3,17 @@ var cors = require('cors')
 var app = express()
 var bodyParser = require('body-parser')
 
-const db = require('../queries')
-
 app.use(cors())
 app.use(bodyParser.json())
 app.use('/', express.static(__dirname + '/static'))
 
-let todos = []
-
 app
   .route('/todos')
-  .get((req, res) => {
-    // res.json({ todos })
-    db.getTasks(req, res)
-  })
   .post((req, res) => {
-    // todos = req.body.todos
-    // res.json({ msg: 'Se actualizó las tareas' })
-    db.createTask(req, res)
+    publishMessage(req.body);
+    return res.status(202).send({
+      message: 'Email enviado con éxito'
+    })
   })
 
 app.listen(5000, function () {
