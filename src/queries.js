@@ -14,7 +14,9 @@ const moveMoney = async (request) => {
   const to = request.to
   const quantity = request.money
 
-  const user = await pool.query('SELECT * FROM users WHERE email = $1', [to], (error, results) => {
+  //SELECT * FROM users WHERE email = 'eduardoaayora24@gmail.com'
+  // const user = await pool.query('SELECT * FROM users WHERE email = $1', [to], (error, results) => {
+    const user = await pool.query('SELECT * FROM users WHERE email = $1', [to], (error, results) => {
     if (error) {
       throw error
     }
