@@ -2,20 +2,21 @@ var express = require('express')
 var cors = require('cors')
 var app = express()
 var bodyParser = require('body-parser')
+const { publishMessage } = require('./moneyWorker')
 
 app.use(cors())
 app.use(bodyParser.json())
 app.use('/', express.static(__dirname + '/static'))
 
 app
-  .route('/todos')
+  .route('/movement')
   .post((req, res) => {
     publishMessage(req.body);
     return res.status(202).send({
-      message: 'Email enviado con éxito'
+      message: 'Dinero enviado, se transferirá en brevedad'
     })
   })
 
-app.listen(5000, function () {
-  console.log('Escuchando en puerto 5000')
+app.listen(5001, function () {
+  console.log('Escuchando en puerto 5001')
 })

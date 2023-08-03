@@ -24,8 +24,8 @@ const moveMoney = async (request) => {
   console.log(user);
 
   await pool.query(
-    'UPDATE INTO users (money) VALUES ($1)',
-    [quantity],
+    'UPDATE INTO users (money) VALUES ($1) WHERE email = $2',
+    [quantity, to],
     (error, results) => {
       if (error) {
         throw error
