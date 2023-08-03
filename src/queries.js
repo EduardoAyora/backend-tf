@@ -16,19 +16,27 @@ const moveMoney = async (request) => {
 
   //SELECT * FROM users WHERE email = 'eduardoaayora24@gmail.com'
   // const user = await pool.query('SELECT * FROM users WHERE email = $1', [to], (error, results) => {
-  const user = await pool.query('SELECT * FROM users WHERE email = $1', [to])
+  const user = await pool.query('SELECT * FROM users WHERE email = $1', [to], (error, results) => {
+    if (error) {
+      throw error
+    }
+
+    console.log('user');
+    console.log(user);
+  })
+
   console.log('user');
   console.log(user);
 
-  await pool.query(
-    'UPDATE INTO users (money) VALUES ($1) WHERE email = $2',
-    [quantity, to],
-    (error, results) => {
-      if (error) {
-        throw error
-      }
-    }
-  )
+  // await pool.query(
+  //   'UPDATE INTO users (money) VALUES ($1) WHERE email = $2',
+  //   [quantity, to],
+  //   (error, results) => {
+  //     if (error) {
+  //       throw error
+  //     }
+  //   }
+  // )
 }
 
 
