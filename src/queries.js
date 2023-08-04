@@ -1,45 +1,38 @@
-// psql -h localhost -U postgres
+const mysql = require('mysql2')
 
-const Pool = require('pg').Pool
-const pool = new Pool({
-  user: 'postgres',
+const pool = mysql.createPool({
   host: 'localhost',
+  user: 'admin',
+  password: 'admin',
   database: 'app',
-  password: 'postgres',
-  port: 5432,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
 })
 
-const moveMoney = async (request) => {
+const moveMoney = (request, confirm) => {
   // const from = request.from
   const to = request.to
   const quantity = request.money
 
-  //SELECT * FROM users WHERE email = 'eduardoaayora24@gmail.com'
-  // const user = await pool.query('SELECT * FROM users WHERE email = $1', [to], (error, results) => {
-  const user = await pool.query('SELECT * FROM users WHERE email = $1', [to], (error, results) => {
+  pool.query('SELECT * FROM users WHERE email = ?', [to], (error, results) => {
     if (error) {
       throw error
     }
+    console.log('ingreso')
+    const currentMoney = results[0].money
 
-    console.log('user');
-    console.log(user);
+    pool.query(
+      'UPDATE users SET money = ? WHERE email = ?',
+      [currentMoney + quantity, to],
+      (err, result) => {
+        if (err) throw err
+        confirm()
+      }
+    )
   })
-
-  console.log('user');
-  console.log(user);
-
-  // await pool.query(
-  //   'UPDATE INTO users (money) VALUES ($1) WHERE email = $2',
-  //   [quantity, to],
-  //   (error, results) => {
-  //     if (error) {
-  //       throw error
-  //     }
-  //   }
-  // )
 }
 
-
 module.exports = {
-  moveMoney
+  moveMoney,
 }
