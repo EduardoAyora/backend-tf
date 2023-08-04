@@ -1,4 +1,5 @@
 const mysql = require('mysql2')
+const axios = require('axios')
 
 const pool = mysql.createPool({
   host: 'localhost',
@@ -27,6 +28,11 @@ const moveMoney = (request, confirm) => {
       [currentMoney + quantity, to],
       (err, result) => {
         if (err) throw err
+
+        axios.post('http://localhost:5002/email', {
+          email: to,
+          quantity,
+        })
         confirm()
       }
     )

@@ -18,3 +18,5 @@ VALUES ('eduardoaayora24@gmail.com', 200);
 
 INSERT INTO users (email, money)
 VALUES ('eduardoaayora64@gmail.com', 800);
+
+select * from users;
